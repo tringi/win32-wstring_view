@@ -23,7 +23,7 @@ If Windows were to implement parallel set of Win32 APIs to support `std::wstring
 ## Better solutions
 
 * [RtlInitUnicodeString](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlinitunicodestring) level:
-  :arrow_forward: https://github.com/tringi/papers/blob/main/win32-wstring_view_api.md
+  https://github.com/tringi/papers/blob/main/win32-wstring_view_api.md
    * alternatively the application could [detour](https://github.com/microsoft/Detours) the `RtlInitUnicodeString` for itself
 
 ## Implemented functions
