@@ -31,3 +31,5 @@ If Windows were to implement parallel set of Win32 APIs to support `std::wstring
 * [(S/G)etThreadDescriptionV](SetThreadDescriptionV.cpp) alternative to
   [(S/G)etThreadDescription](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreaddescription)
 
+* [CreateFileV](CreateFileV.cpp) alternative to [CreateFileW](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew)
+   * currently only partially implemented

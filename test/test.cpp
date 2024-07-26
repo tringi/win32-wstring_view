@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include "..\Windows_StringViewAPIs.h"
 
+using namespace std::literals;
+
 // extern "C" WINBASEAPI NTSTATUS WINAPI RtlInitUnicodeStringEx (UNICODE_STRING * DestinationString, PCWSTR SourceString);
 HRESULT (WINAPI * ptrGetThreadDescription) (_In_ HANDLE, _Outptr_result_z_ PWSTR *) = NULL;
 
@@ -11,6 +13,12 @@ int main () {
     init ();
     test_SetThreadDescriptionV ();
 
+
+    auto h = CreateFileV (L"\\??\\D:\\Projekty\\win32-wstring_view\\test\\file_sv.txt"sv, GENERIC_READ | GENERIC_WRITE, 7, NULL, CREATE_ALWAYS, 0);
+    if (h != INVALID_HANDLE_VALUE) {
+        std::wprintf (L"SUCCESS: CreateFileV\n");
+        CloseHandle (h);
+    }
 
     return 0;
 }
@@ -32,8 +40,6 @@ void init () {
 }
 
 void test_SetThreadDescriptionV () {
-    using namespace std::literals;
-
     auto string = L"a\0b\0c\0d\0e"sv;
 
     SetThreadDescriptionV (GetCurrentThread (), string);

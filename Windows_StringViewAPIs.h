@@ -8,4 +8,9 @@ HRESULT SetThreadDescriptionV (_In_ HANDLE hThread, _In_ std::wstring_view wsvTh
 HRESULT GetThreadDescriptionV (_In_ HANDLE hThread, _In_ std::wstring & wsThreadDescription);
 HRESULT GetThreadDescriptionV (_In_ HANDLE hThread, wchar_t * buffer, std::size_t & length);
 
+HANDLE CreateFileV (std::wstring_view lpFileName,
+                    DWORD dwDesiredAccess, DWORD dwShareMode,
+                    LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+                    DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes);
+
 #endif

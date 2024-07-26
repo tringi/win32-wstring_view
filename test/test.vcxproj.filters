@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="test.cpp" />
     <ClCompile Include="..\SetThreadDescriptionV.cpp" />
+    <ClCompile Include="..\CreateFileV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Windows_StringViewAPIs.h" />
