@@ -2,11 +2,13 @@
 #include <winternl.h>
 #include <string_view>
 
+#pragma warning(disable: 6262) // warning about 64kB on stack
+
 HRESULT SetThreadDescriptionV (_In_ HANDLE hThread, _In_ std::wstring_view wsvThreadDescription) {
     
     bool trunc = false;
     auto size = wsvThreadDescription.size () * sizeof (WCHAR);
-    if (size > USHRT_MAX) {
+    if (size > 0xFFFE) {
         size = 0xFFFE;
         trunc = true;
     }
@@ -29,7 +31,7 @@ HRESULT SetThreadDescriptionV (_In_ HANDLE hThread, _In_ std::wstring_view wsvTh
 
 HRESULT GetThreadDescriptionV (_In_ HANDLE hThread, wchar_t * buffer, std::size_t & length) {
     ULONG retlen;
-    HRESULT status = NtQueryInformationThread (hThread, (THREADINFOCLASS) 0x26, buffer, length * sizeof (WCHAR), &retlen);
+    HRESULT status = NtQueryInformationThread (hThread, (THREADINFOCLASS) 0x26, buffer, (ULONG) (length * sizeof (WCHAR)), &retlen);
 
     if (SUCCEEDED (status)) {
         auto header = reinterpret_cast <UNICODE_STRING *> (buffer);
@@ -43,17 +45,17 @@ HRESULT GetThreadDescriptionV (_In_ HANDLE hThread, wchar_t * buffer, std::size_
 }
 
 HRESULT GetThreadDescriptionV (_In_ HANDLE hThread, _In_ std::wstring & wsThreadDescription) {
-    union {
+    struct {
         UNICODE_STRING header;
-        std::uint8_t buffer [0xFFFE + sizeof (UNICODE_STRING)];
-    };
+        wchar_t text [0x8000];
+    } buffer;
 
     ULONG retlen;
-    HRESULT status = NtQueryInformationThread (hThread, (THREADINFOCLASS) 0x26, buffer, sizeof buffer, &retlen);
+    HRESULT status = NtQueryInformationThread (hThread, (THREADINFOCLASS) 0x26, &buffer, sizeof buffer, &retlen);
 
     if (SUCCEEDED (status)) {
         try {
-            wsThreadDescription.assign ((const WCHAR *) (buffer + sizeof (UNICODE_STRING)), header.Length / sizeof (WCHAR));
+            wsThreadDescription.assign (buffer.text, buffer.header.Length / sizeof (WCHAR));
         } catch (std::bad_alloc) {
             status = STATUS_NO_MEMORY;
         } catch (...) {
