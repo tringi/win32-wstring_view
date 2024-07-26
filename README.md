@@ -28,4 +28,6 @@ If Windows were to implement parallel set of Win32 APIs to support `std::wstring
 
 ## Implemented functions
 
-* TBD
+* [(S/G)etThreadDescriptionV](SetThreadDescriptionV.cpp) alternative to
+  [(S/G)etThreadDescription](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreaddescription)
+
